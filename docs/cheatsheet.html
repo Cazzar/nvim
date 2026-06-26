@@ -192,6 +192,11 @@
     .h-sql       .card-header { color: var(--accent); }
     .h-ui        .card-header { color: var(--cyan); }
     .h-terminal  .card-header { color: var(--muted); }
+    .h-legend    .card-header { color: var(--comment); }
+
+    .legend-row td:first-child { color: var(--key); min-width: 60px; }
+    .legend-row td:nth-child(2) { color: var(--accent); padding-right: 1rem; min-width: 120px; }
+    .legend-row td:last-child { color: var(--comment); font-size: 0.8em; }
   </style>
 </head>
 <body>
@@ -208,6 +213,25 @@
 </header>
 
 <div class="grid">
+
+  <!-- KEY NOTATION LEGEND -->
+  <div class="card h-legend" style="grid-column: 1 / -1;">
+    <div class="card-header">Key Notation</div>
+    <table>
+      <tr class="legend-row"><td>C-x</td><td>Ctrl + x</td><td>Hold Control, press x</td></tr>
+      <tr class="legend-row"><td>S-x</td><td>Shift + x</td><td>Hold Shift, press x — e.g. S-h means Shift+H</td></tr>
+      <tr class="legend-row"><td>A-x</td><td>Alt + x</td><td>Hold Alt (Option on Mac), press x</td></tr>
+      <tr class="legend-row"><td>M-x</td><td>Meta + x</td><td>Same as Alt on most systems</td></tr>
+      <tr class="legend-row"><td>&lt;leader&gt;</td><td>Space</td><td>The leader key — tap Space first, then the rest of the sequence</td></tr>
+      <tr class="legend-row"><td>&lt;CR&gt;</td><td>Enter / Return</td><td>The carriage return key</td></tr>
+      <tr class="legend-row"><td>&lt;Esc&gt;</td><td>Escape</td><td>Or use jk from insert mode (mapped in this config)</td></tr>
+      <tr class="legend-row"><td>&lt;Tab&gt;</td><td>Tab</td><td></td></tr>
+      <tr class="legend-row"><td>&lt;BS&gt;</td><td>Backspace</td><td></td></tr>
+      <tr class="legend-row"><td>{motion}</td><td>any motion</td><td>e.g. w (word), j (line down), $ (end of line), ip (inner paragraph)</td></tr>
+      <tr class="legend-row"><td>[op]</td><td>operator-pending</td><td>Key only active while waiting for a motion after an operator like d, y, c</td></tr>
+      <tr class="legend-row"><td>[vis]</td><td>visual mode</td><td>Key active when text is selected</td></tr>
+    </table>
+  </div>
 
   <!-- GENERAL -->
   <div class="card h-general">
