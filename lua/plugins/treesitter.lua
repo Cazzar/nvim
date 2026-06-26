@@ -1,15 +1,14 @@
+-- nvim-treesitter was fully rewritten; requires Neovim 0.12+ and does NOT support lazy-loading.
+-- Highlighting, folding, and indentation are now Neovim built-ins — treesitter provides parsers/queries.
+-- Textobjects plugin has its own standalone setup API (not via nvim-treesitter.configs).
 return {
-  -- Core treesitter — textobjects is a true dependency (configured via nvim-treesitter opts)
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
+    lazy = false, -- explicit: plugin README states it does not support lazy-loading
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre", "VeryLazy" },
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-    },
-    opts = {
-      ensure_installed = {
+    config = function()
+      -- Install all parsers (async, no-op if already up to date)
+      require("nvim-treesitter").install({
         "bash",
         "c_sharp",
         "css",
@@ -43,80 +42,85 @@ return {
         "vue",
         "xml",
         "yaml",
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "markdown" },
-      },
-      indent = { enable = true },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-            ["ai"] = "@conditional.outer",
-            ["ii"] = "@conditional.inner",
-            ["al"] = "@loop.outer",
-            ["il"] = "@loop.inner",
-            ["ab"] = "@block.outer",
-            ["ib"] = "@block.inner",
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ["]f"] = "@function.outer",
-            ["]c"] = "@class.outer",
-            ["]a"] = "@parameter.inner",
-          },
-          goto_next_end = {
-            ["]F"] = "@function.outer",
-            ["]C"] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[f"] = "@function.outer",
-            ["[c"] = "@class.outer",
-            ["[a"] = "@parameter.inner",
-          },
-          goto_previous_end = {
-            ["[F"] = "@function.outer",
-            ["[C"] = "@class.outer",
-          },
-        },
-        swap = {
-          enable = true,
-          swap_next = { ["<leader>csa"] = "@parameter.inner" },
-          swap_previous = { ["<leader>csA"] = "@parameter.inner" },
-        },
-      },
-    },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      })
+
+      -- Enable treesitter highlighting + indentation for every filetype
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter_attach", { clear = true }),
+        callback = function(ev)
+          if vim.bo[ev.buf].filetype == "" then return end
+          pcall(vim.treesitter.start, ev.buf)
+          vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
     end,
   },
 
-  -- Context and autotag depend ON treesitter (not the other way around)
+  -- Textobjects: standalone plugin with its own setup (not via nvim-treesitter.configs)
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    lazy = false,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        select = { lookahead = true },
+        move  = { set_jumps = true },
+      })
+
+      local sel  = require("nvim-treesitter-textobjects.select")
+      local mv   = require("nvim-treesitter-textobjects.move")
+      local swap = require("nvim-treesitter-textobjects.swap")
+
+      -- Text object selections
+      local selections = {
+        ["af"] = "@function.outer", ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",    ["ic"] = "@class.inner",
+        ["aa"] = "@parameter.outer",["ia"] = "@parameter.inner",
+        ["ai"] = "@conditional.outer", ["ii"] = "@conditional.inner",
+        ["al"] = "@loop.outer",     ["il"] = "@loop.inner",
+        ["ab"] = "@block.outer",    ["ib"] = "@block.inner",
+      }
+      for key, query in pairs(selections) do
+        vim.keymap.set({ "x", "o" }, key, function()
+          sel.select_textobject(query, "textobjects")
+        end, { desc = "Select " .. query })
+      end
+
+      -- Motion keymaps
+      local motions = {
+        { "]f", "goto_next_start",     "@function.outer"  },
+        { "]c", "goto_next_start",     "@class.outer"     },
+        { "]a", "goto_next_start",     "@parameter.inner" },
+        { "]F", "goto_next_end",       "@function.outer"  },
+        { "]C", "goto_next_end",       "@class.outer"     },
+        { "[f", "goto_previous_start", "@function.outer"  },
+        { "[c", "goto_previous_start", "@class.outer"     },
+        { "[a", "goto_previous_start", "@parameter.inner" },
+        { "[F", "goto_previous_end",   "@function.outer"  },
+        { "[C", "goto_previous_end",   "@class.outer"     },
+      }
+      for _, m in ipairs(motions) do
+        local key, fn, query = m[1], m[2], m[3]
+        vim.keymap.set({ "n", "x", "o" }, key, function()
+          mv[fn]({ query }, "textobjects")
+        end, { desc = fn:gsub("_", " ") .. " " .. query })
+      end
+
+      -- Swap keymaps
+      vim.keymap.set("n", "<leader>csa", function()
+        swap.swap_next({ "@parameter.inner" }, "textobjects")
+      end, { desc = "Swap next parameter" })
+      vim.keymap.set("n", "<leader>csA", function()
+        swap.swap_previous({ "@parameter.inner" }, "textobjects")
+      end, { desc = "Swap prev parameter" })
+    end,
+  },
+
+  -- Sticky context header at top of window
   {
     "nvim-treesitter/nvim-treesitter-context",
+    lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    event = { "BufReadPost", "BufNewFile" },
     opts = {
       enable = true,
       max_lines = 4,
@@ -134,14 +138,15 @@ return {
     },
   },
 
+  -- Auto-close/rename HTML, Vue, JSX tags
   {
     "windwp/nvim-ts-autotag",
+    lazy = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    event = { "BufReadPost", "BufNewFile" },
     opts = {},
   },
 
-  -- Markdown rendering (depends on treesitter for parsing)
+  -- Markdown rendering
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
