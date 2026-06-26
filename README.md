@@ -62,7 +62,7 @@ After installing, open Neovim and run `:TSUpdate`.
 | `rustup` | Rust — install via [rustup.rs](https://rustup.rs), not mise |
 | `fd` | Telescope file search (`mise use -g fd`) |
 | `ripgrep` | Telescope live grep (`mise use -g ripgrep`) |
-| `cmake` | fzf-native build (Windows: `scoop install cmake`) |
+| `cmake` | telescope-fzf-native build — `winget install --id Kitware.CMake` |
 | `luarocks` | Mason: luacheck — see below |
 
 ### LuaRocks / luacheck (Windows)

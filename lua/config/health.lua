@@ -88,7 +88,7 @@ local deps = {
     desc     = "telescope-fzf-native build",
     critical = false,
     hint     = hint(
-      "winget install --id Kitware.CMake",
+      "winget install --id Kitware.CMake  (required for telescope-fzf-native)",
       "brew install cmake",
       "sudo apt install cmake  /  sudo pacman -S cmake"
     ),
