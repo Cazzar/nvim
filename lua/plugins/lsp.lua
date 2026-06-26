@@ -217,7 +217,7 @@ return {
         "stylua",
         "sql-formatter",
         -- Linters
-        "luacheck",
+        -- "luacheck",  -- requires luarocks: pacman -S mingw-w64-ucrt-x86_64-luarocks && luarocks install luacheck
         "phpstan",
         "eslint_d",
         "markdownlint-cli2",
@@ -260,7 +260,7 @@ return {
         },
       })
 
-      local lspconfig = require("nvim-lspconfig")
+      local lspconfig = require("lspconfig")
 
       require("mason-lspconfig").setup_handlers({
         function(server_name)
