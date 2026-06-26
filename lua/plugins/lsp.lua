@@ -81,7 +81,7 @@ local servers = {
         {
           name = "@vue/typescript-plugin",
           location = vim.fn.stdpath("data")
-            .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+            .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
           languages = { "vue" },
         },
       },
@@ -107,8 +107,8 @@ local servers = {
     },
   },
 
-  -- Vue (volar 2.x hybrid mode)
-  volar = {
+  -- Vue (vue_ls, formerly volar, hybrid mode with ts_ls)
+  vue_ls = {
     filetypes = { "vue" },
     init_options = {
       vue = { hybridMode = true },
