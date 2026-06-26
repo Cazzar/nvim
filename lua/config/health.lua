@@ -1,82 +1,107 @@
 local M = {}
 
+local is_win = vim.fn.has("win32") == 1
+local is_mac = vim.fn.has("mac") == 1
+
+local function hint(win, mac, linux)
+  if is_win then return win end
+  if is_mac then return mac end
+  return linux
+end
+
 -- { exe, description, critical, install_hint }
 local deps = {
   {
-    exe = "tree-sitter",
-    desc = "Treesitter parser compilation",
+    exe      = "tree-sitter",
+    desc     = "Treesitter parser compilation",
     critical = true,
-    hint = vim.fn.has("win32") == 1
-      and "winget install --id tree-sitter.tree-sitter-cli"
-      or  vim.fn.has("mac") == 1
-        and "brew install tree-sitter"
-        or  "cargo install tree-sitter-cli  (requires clang)",
+    hint     = hint(
+      "winget install --id tree-sitter.tree-sitter-cli",
+      "brew install tree-sitter",
+      "cargo install tree-sitter-cli  (requires clang)"
+    ),
   },
   {
-    exe = "git",
-    desc = "Plugin manager (lazy.nvim)",
+    exe      = "git",
+    desc     = "Plugin manager (lazy.nvim)",
     critical = true,
-    hint = "Install via your system package manager",
+    hint     = hint(
+      "winget install --id Git.Git",
+      "brew install git",
+      "sudo apt install git  /  sudo pacman -S git"
+    ),
   },
   {
-    exe = "curl",
-    desc = "Mason package downloads",
+    exe      = "curl",
+    desc     = "Mason package downloads",
     critical = true,
-    hint = "Install via your system package manager",
+    hint     = hint(
+      "winget install --id curl.curl",
+      "brew install curl",
+      "sudo apt install curl  /  sudo pacman -S curl"
+    ),
   },
   {
-    exe = "rg",
-    desc = "Telescope live grep",
+    exe      = "rg",
+    desc     = "Telescope live grep",
     critical = true,
-    hint = "mise use -g ripgrep  (or: winget install BurntSushi.ripgrep.MSVC)",
+    hint     = "mise use -g ripgrep",
   },
   {
-    exe = "fd",
-    desc = "Telescope file search",
+    exe      = "fd",
+    desc     = "Telescope file search",
     critical = true,
-    hint = "mise use -g fd  (or: winget install sharkdp.fd)",
+    hint     = "mise use -g fd",
   },
   {
-    exe = "node",
-    desc = "JS/TS/Vue LSP, prettierd, eslint_d",
+    exe      = "node",
+    desc     = "JS/TS/Vue LSP, prettierd, eslint_d",
     critical = false,
-    hint = "mise use node@lts",
+    hint     = "mise use -g node@lts",
   },
   {
-    exe = "npm",
-    desc = "Mason: JS-based tool installs",
+    exe      = "npm",
+    desc     = "Mason: JS-based tool installs",
     critical = false,
-    hint = "Bundled with node — mise use node@lts",
+    hint     = "Bundled with node — mise use -g node@lts",
   },
   {
-    exe = "php",
-    desc = "PHP LSP (intelephense)",
+    exe      = "php",
+    desc     = "PHP LSP (intelephense)",
     critical = false,
-    hint = "mise use php",
+    hint     = "mise use -g php",
   },
   {
-    exe = "dotnet",
-    desc = "C# LSP (omnisharp)",
+    exe      = "dotnet",
+    desc     = "C# LSP (omnisharp)",
     critical = false,
-    hint = "mise use dotnet",
+    hint     = "mise use -g dotnet",
   },
   {
-    exe = "cargo",
-    desc = "Rust toolchain / rust-analyzer",
+    exe      = "cargo",
+    desc     = "Rust toolchain / rust-analyzer",
     critical = false,
-    hint = "Install rustup from https://rustup.rs",
+    hint     = "Install rustup from https://rustup.rs",
   },
   {
-    exe = "cmake",
-    desc = "telescope-fzf-native build",
+    exe      = "cmake",
+    desc     = "telescope-fzf-native build",
     critical = false,
-    hint = "scoop install cmake  (or: mise use cmake)",
+    hint     = hint(
+      "winget install --id Kitware.CMake",
+      "brew install cmake",
+      "sudo apt install cmake  /  sudo pacman -S cmake"
+    ),
   },
   {
-    exe = "luarocks",
-    desc = "Mason: luacheck linter",
+    exe      = "luarocks",
+    desc     = "Mason: luacheck linter",
     critical = false,
-    hint = "winget install --id DEVCOM.Lua  then: luarocks install luacheck",
+    hint     = hint(
+      "winget install --id DEVCOM.Lua  then: luarocks install luacheck",
+      "brew install luarocks  then: luarocks install luacheck",
+      "sudo apt install luarocks  then: luarocks install luacheck"
+    ),
   },
 }
 
