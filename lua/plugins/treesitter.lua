@@ -1,4 +1,5 @@
 return {
+  -- Core treesitter — textobjects is a true dependency (configured via nvim-treesitter opts)
   {
     "nvim-treesitter/nvim-treesitter",
     version = false,
@@ -6,8 +7,6 @@ return {
     event = { "BufReadPost", "BufNewFile", "BufWritePre", "VeryLazy" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "nvim-treesitter/nvim-treesitter-context",
-      "windwp/nvim-ts-autotag",
     },
     opts = {
       ensure_installed = {
@@ -16,7 +15,6 @@ return {
         "css",
         "diff",
         "dockerfile",
-        "dot",
         "gitcommit",
         "gitignore",
         "git_rebase",
@@ -104,16 +102,8 @@ return {
         },
         swap = {
           enable = true,
-          swap_next = { ["<leader>sna"] = "@parameter.inner" },
-          swap_previous = { ["<leader>spa"] = "@parameter.inner" },
-        },
-        lsp_interop = {
-          enable = true,
-          border = "rounded",
-          peek_definition_code = {
-            ["<leader>pf"] = "@function.outer",
-            ["<leader>pc"] = "@class.outer",
-          },
+          swap_next = { ["<leader>csa"] = "@parameter.inner" },
+          swap_previous = { ["<leader>csA"] = "@parameter.inner" },
         },
       },
     },
@@ -122,9 +112,11 @@ return {
     end,
   },
 
-  -- Show current context at top of screen
+  -- Context and autotag depend ON treesitter (not the other way around)
   {
     "nvim-treesitter/nvim-treesitter-context",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
       enable = true,
       max_lines = 4,
@@ -133,17 +125,23 @@ return {
     },
     keys = {
       { "<leader>ut", "<cmd>TSContextToggle<cr>", desc = "Toggle treesitter context" },
-      { "[x", function() require("treesitter-context").go_to_context(vim.v.count1) end, silent = true, desc = "Jump to context" },
+      {
+        "[x",
+        function() require("treesitter-context").go_to_context(vim.v.count1) end,
+        silent = true,
+        desc = "Jump to context",
+      },
     },
   },
 
-  -- Auto-close/rename HTML, Vue, JSX tags
   {
     "windwp/nvim-ts-autotag",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    event = { "BufReadPost", "BufNewFile" },
     opts = {},
   },
 
-  -- Markdown rendering in buffer
+  -- Markdown rendering (depends on treesitter for parsing)
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
