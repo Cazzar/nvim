@@ -76,7 +76,7 @@ local deps = {
     exe = "luarocks",
     desc = "Mason: luacheck linter",
     critical = false,
-    hint = "pacman -S mingw-w64-ucrt-x86_64-luarocks  (or: scoop install luarocks)",
+    hint = "winget install --id DEVCOM.Lua  then: luarocks install luacheck",
   },
 }
 

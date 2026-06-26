@@ -67,21 +67,14 @@ After installing, open Neovim and run `:TSUpdate`.
 
 ### LuaRocks / luacheck (Windows)
 
-Mason installs `luacheck` via LuaRocks. On Windows with MSYS2 (ucrt64):
-
-```bash
-pacman -S mingw-w64-ucrt-x86_64-luarocks
-luarocks install luacheck
-```
-
-Or via Scoop:
+Mason installs `luacheck` via LuaRocks.
 
 ```powershell
-scoop install luarocks
+winget install --id DEVCOM.Lua
 luarocks install luacheck
 ```
 
-After installing luarocks, reopen Neovim and run `:MasonToolsInstall` — luacheck will install cleanly.
+After installing, reopen Neovim and run `:MasonToolsInstall` — luacheck will install cleanly.
 
 ## Tmux integration
 
