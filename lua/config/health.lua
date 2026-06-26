@@ -28,13 +28,13 @@ local deps = {
     exe = "rg",
     desc = "Telescope live grep",
     critical = true,
-    hint = "mise use ripgrep  (or: scoop install ripgrep)",
+    hint = "mise use -g ripgrep  (or: winget install BurntSushi.ripgrep.MSVC)",
   },
   {
     exe = "fd",
     desc = "Telescope file search",
     critical = true,
-    hint = "mise use fd  (or: scoop install fd)",
+    hint = "mise use -g fd  (or: winget install sharkdp.fd)",
   },
   {
     exe = "node",

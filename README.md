@@ -60,8 +60,8 @@ After installing, open Neovim and run `:TSUpdate`.
 | `dotnet` | C# / OmniSharp LSP |
 | `php` | PHP / intelephense LSP |
 | `rustup` | Rust — install via [rustup.rs](https://rustup.rs), not mise |
-| `fd` | Telescope file search |
-| `ripgrep` | Telescope live grep |
+| `fd` | Telescope file search (`mise use -g fd`) |
+| `ripgrep` | Telescope live grep (`mise use -g ripgrep`) |
 | `cmake` | fzf-native build (Windows: `scoop install cmake`) |
 | `luarocks` | Mason: luacheck — see below |
 
