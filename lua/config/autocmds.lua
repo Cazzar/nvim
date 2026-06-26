@@ -19,15 +19,7 @@ autocmd("BufReadPost", {
   end,
 })
 
-autocmd("BufWritePre", {
-  group = augroup("trim_whitespace", { clear = true }),
-  pattern = "*",
-  callback = function()
-    local save = vim.fn.winsaveview()
-    vim.cmd([[%s/\s\+$//e]])
-    vim.fn.winrestview(save)
-  end,
-})
+-- Trailing whitespace trimming is handled by conform.nvim (trim_whitespace formatter)
 
 -- Close auxiliary windows with q
 autocmd("FileType", {

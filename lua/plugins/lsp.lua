@@ -217,9 +217,9 @@ return {
         "stylua",
         "sql-formatter",
         -- Linters
+        "luacheck",
         "phpstan",
         "eslint_d",
-        "luacheck",
         "markdownlint-cli2",
         "hadolint",
         "shellcheck",
