@@ -34,6 +34,25 @@ autocmd("FileType", {
   end,
 })
 
+-- Warn on startup about missing critical dependencies
+autocmd("VimEnter", {
+  group = augroup("dep_check", { clear = true }),
+  once = true,
+  callback = function()
+    local missing, _ = require("config.health").check_deps()
+    if #missing > 0 then
+      local names = vim.tbl_map(function(d) return d.exe end, missing)
+      vim.schedule(function()
+        vim.notify(
+          "Missing critical deps: " .. table.concat(names, ", ") .. "\nRun :checkhealth config for details.",
+          vim.log.levels.WARN,
+          { title = "nvim health" }
+        )
+      end)
+    end
+  end,
+})
+
 -- Load mise environment on startup
 autocmd("VimEnter", {
   group = augroup("mise_env", { clear = true }),
