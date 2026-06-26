@@ -1,0 +1,16 @@
+# Compiled spell files
+spell/*.add.spl
+spell/*.utf-8.spl
+
+# Swap / backup / undo files (stored in stdpath("data"), not here)
+*.swp
+*.swo
+*~
+
+# Mason-installed tools (in stdpath("data"), not here)
+# mason/ is NOT in this directory, so no need to ignore it here
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
