@@ -35,9 +35,27 @@ ripgrep = "latest"
 
 Then `mise install` to pull everything down.
 
+### tree-sitter-cli
+
+Required by the new nvim-treesitter (0.12 rewrite) to compile parsers locally.
+
+```powershell
+# Windows
+winget install --id tree-sitter.tree-sitter-cli
+
+# macOS
+brew install tree-sitter
+
+# Linux
+cargo install tree-sitter-cli
+# (requires clang — e.g. apt install clang / pacman -S clang)
+```
+
+After installing, open Neovim and run `:TSUpdate`.
+
 | Tool | Purpose |
 |------|---------|
-| `tree-sitter` | **Required** — compile treesitter parsers (`cargo install tree-sitter-cli`) |
+| `tree-sitter` | **Required** — compile treesitter parsers (see below) |
 | `node` + `npm` | JS/TS/Vue LSP, prettierd, eslint_d |
 | `dotnet` | C# / OmniSharp LSP |
 | `php` | PHP / intelephense LSP |

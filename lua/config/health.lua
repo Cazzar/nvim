@@ -6,7 +6,11 @@ local deps = {
     exe = "tree-sitter",
     desc = "Treesitter parser compilation",
     critical = true,
-    hint = "cargo install tree-sitter-cli  (or: mise use cargo:tree-sitter-cli)",
+    hint = vim.fn.has("win32") == 1
+      and "winget install --id tree-sitter.tree-sitter-cli"
+      or  vim.fn.has("mac") == 1
+        and "brew install tree-sitter"
+        or  "cargo install tree-sitter-cli  (requires clang)",
   },
   {
     exe = "git",
