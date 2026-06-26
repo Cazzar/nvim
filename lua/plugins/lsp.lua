@@ -197,11 +197,25 @@ return {
   -- Bridge mason ↔ lspconfig
   {
     "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = vim.tbl_keys(servers),
-      automatic_installation = true,
+    dependencies = {
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig",
+      "hrsh7th/cmp-nvim-lsp",
     },
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = vim.tbl_keys(servers),
+        automatic_installation = true,
+        handlers = {
+          function(server_name)
+            local config = vim.tbl_deep_extend("force", {}, servers[server_name] or {})
+            config.on_attach = on_attach
+            config.capabilities = make_capabilities()
+            require("lspconfig")[server_name].setup(config)
+          end,
+        },
+      })
+    end,
   },
 
   -- Auto-install formatters and linters via mason
@@ -240,7 +254,6 @@ return {
       "b0o/schemastore.nvim",
     },
     config = function()
-      -- Diagnostic display
       vim.diagnostic.config({
         underline = true,
         update_in_insert = false,
@@ -258,17 +271,6 @@ return {
             [vim.diagnostic.severity.INFO] = " ",
           },
         },
-      })
-
-      local lspconfig = require("lspconfig")
-
-      require("mason-lspconfig").setup_handlers({
-        function(server_name)
-          local config = servers[server_name] or {}
-          config.on_attach = on_attach
-          config.capabilities = make_capabilities()
-          lspconfig[server_name].setup(config)
-        end,
       })
     end,
   },
