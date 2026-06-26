@@ -37,6 +37,7 @@ Then `mise install` to pull everything down.
 
 | Tool | Purpose |
 |------|---------|
+| `tree-sitter` | **Required** — compile treesitter parsers (`cargo install tree-sitter-cli`) |
 | `node` + `npm` | JS/TS/Vue LSP, prettierd, eslint_d |
 | `dotnet` | C# / OmniSharp LSP |
 | `php` | PHP / intelephense LSP |
