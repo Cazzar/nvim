@@ -28,7 +28,7 @@ map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear highlights" })
 
 -- Splits
 map("n", "<leader>sv", "<C-w>v", { desc = "Split vertically" })
-map("n", "<leader>sh", "<C-w>s", { desc = "Split horizontally" })
+map("n", "<leader>s-", "<C-w>s", { desc = "Split horizontally" })
 map("n", "<leader>se", "<C-w>=", { desc = "Equalize splits" })
 map("n", "<leader>sx", "<cmd>close<cr>", { desc = "Close split" })
 
