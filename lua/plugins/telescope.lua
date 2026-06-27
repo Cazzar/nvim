@@ -30,6 +30,7 @@ return {
       { "<leader>gS", "<cmd>Telescope git_stash<cr>", desc = "Git stash" },
 
       -- LSP (also in lsp.lua via on_attach, these work before attach)
+      { "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Find symbol (workspace)" },
       { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
       { "<leader>sS", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace symbols" },
 
