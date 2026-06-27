@@ -92,6 +92,7 @@ return {
       icons = { rules = false },
       spec = {
         { "<leader>b", group = "buffers", icon = "" },
+        { "<leader>l", group = "laravel" },
         { "<leader>c", group = "code" },
         { "<leader>d", group = "debug" },
         { "<leader>f", group = "find/files" },

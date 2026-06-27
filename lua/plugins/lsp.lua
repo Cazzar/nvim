@@ -37,7 +37,7 @@ local servers = {
     settings = {
       intelephense = {
         stubs = {
-          "apache", "bcmath", "bz2", "calendar", "com_dotnet", "core", "ctype", "curl",
+          "apache", "bcmath", "laravel", "bz2", "calendar", "com_dotnet", "core", "ctype", "curl",
           "date", "dba", "dom", "enchant", "exif", "ffi", "fileinfo", "filter", "fpm",
           "ftp", "gd", "gettext", "gmp", "hash", "iconv", "imap", "intl", "json",
           "ldap", "libxml", "mbstring", "meta", "mysqli", "oci8", "odbc", "openssl",

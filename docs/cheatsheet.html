@@ -241,6 +241,9 @@
             .h-ui .card-header {
                 color: var(--cyan);
             }
+            .h-laravel .card-header {
+                color: var(--amber);
+            }
             .h-terminal .card-header {
                 color: var(--muted);
             }
@@ -1314,6 +1317,25 @@
                     <tr>
                         <td><kbd>&lt;leader&gt;cG</kbd></td>
                         <td>Upgrade all crates</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- LARAVEL -->
+            <div class="card h-laravel">
+                <div class="card-header">Laravel (laravel.nvim)</div>
+                <table>
+                    <tr>
+                        <td><kbd>&lt;leader&gt;la</kbd></td>
+                        <td>Artisan command picker</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>&lt;leader&gt;lr</kbd></td>
+                        <td>Routes browser</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>&lt;leader&gt;lm</kbd></td>
+                        <td>Related files (model ↔ migration, controller ↔ view)</td>
                     </tr>
                 </table>
             </div>

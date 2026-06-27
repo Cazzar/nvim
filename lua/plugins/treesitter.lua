@@ -10,6 +10,7 @@ return {
       -- Install all parsers (async, no-op if already up to date)
       require("nvim-treesitter").install({
         "bash",
+        "blade",
         "c_sharp",
         "css",
         "diff",
