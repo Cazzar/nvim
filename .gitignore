@@ -14,3 +14,8 @@ spell/*.utf-8.spl
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Machine-local config (not versioned)
+pre-init.local.lua
+post-init.local.lua
+lua/local/

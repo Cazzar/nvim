@@ -14,11 +14,21 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+local pre_init = vim.fn.stdpath("config") .. "/pre-init.local.lua"
+if vim.loop.fs_stat(pre_init) then
+  dofile(pre_init)
+end
+
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
 
-require("lazy").setup("plugins", {
+local specs = { { import = "plugins" } }
+if vim.loop.fs_stat(vim.fn.stdpath("config") .. "/lua/local") then
+  table.insert(specs, { import = "local" })
+end
+
+require("lazy").setup(specs, {
   change_detection = { notify = false },
   checker = { enabled = true, notify = false },
   performance = {
@@ -30,3 +40,8 @@ require("lazy").setup("plugins", {
     },
   },
 })
+
+local post_init = vim.fn.stdpath("config") .. "/post-init.local.lua"
+if vim.loop.fs_stat(post_init) then
+  dofile(post_init)
+end
