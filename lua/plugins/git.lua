@@ -147,7 +147,7 @@ return {
       { "<leader>gP", function()
         local base = get_pr_base()
         if base then
-          vim.cmd("DiffviewOpen " .. base .. "...HEAD")
+          vim.cmd("DiffviewOpen " .. base .. "...HEAD -- " .. vim.fn.fnameescape(vim.fn.getcwd()))
         else
           vim.notify("Could not determine PR base", vim.log.levels.WARN)
         end
@@ -157,7 +157,7 @@ return {
           if not ref or ref == "" then return end
           local base = pr_base_for(ref)
           if base then
-            vim.cmd("DiffviewOpen " .. base .. "...HEAD")
+            vim.cmd("DiffviewOpen " .. base .. "...HEAD -- " .. vim.fn.fnameescape(vim.fn.getcwd()))
           else
             vim.notify("Could not find merge-base with " .. ref, vim.log.levels.WARN)
           end
