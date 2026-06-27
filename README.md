@@ -3,6 +3,8 @@
 Personal Neovim config built on [lazy.nvim](https://github.com/folke/lazy.nvim).  
 Requires **Neovim 0.12+**.
 
+Cheat sheet: **[nvim.cazzar.dev](https://nvim.cazzar.dev)**
+
 ## Quick start
 
 ```
