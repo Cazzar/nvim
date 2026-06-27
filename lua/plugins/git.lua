@@ -1,3 +1,27 @@
+-- Detect the merge-base of HEAD against the remote default branch.
+-- Returns the commit SHA, or nil if it can't be determined.
+local function get_pr_base()
+  local remote_head = vim.fn.system("git rev-parse --abbrev-ref origin/HEAD 2>/dev/null"):gsub("\n", "")
+  local base_ref
+  if remote_head ~= "" and not remote_head:match("^fatal") then
+    base_ref = remote_head
+  else
+    for _, ref in ipairs({ "origin/main", "origin/master", "origin/develop" }) do
+      local result = vim.fn.system("git rev-parse --verify " .. ref .. " 2>/dev/null"):gsub("\n", "")
+      if result ~= "" and not result:match("^fatal") then
+        base_ref = ref
+        break
+      end
+    end
+  end
+  if not base_ref then return nil end
+  local sha = vim.fn.system("git merge-base " .. base_ref .. " HEAD 2>/dev/null"):gsub("\n", "")
+  if sha == "" or sha:match("^fatal") then return nil end
+  return sha
+end
+
+local pr_mode = false
+
 return {
   -- Git signs in the gutter
   {
@@ -37,6 +61,24 @@ return {
         map("n", "<leader>ghB", gs.blame, "Blame buffer")
         map("n", "<leader>ghd", gs.diffthis, "Diff this")
         map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff this ~")
+
+        -- PR diff mode: toggle gutter signs against merge-base instead of HEAD
+        map("n", "<leader>gp", function()
+          if pr_mode then
+            gs.reset_base(true)
+            pr_mode = false
+            vim.notify("Gitsigns: local diff mode", vim.log.levels.INFO)
+          else
+            local base = get_pr_base()
+            if base then
+              gs.change_base(base, true)
+              pr_mode = true
+              vim.notify("Gitsigns: PR diff mode (" .. base:sub(1, 8) .. ")", vim.log.levels.INFO)
+            else
+              vim.notify("Gitsigns: could not determine PR base", vim.log.levels.WARN)
+            end
+          end
+        end, "Toggle PR diff mode")
 
         -- Text object
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Select hunk")
@@ -81,6 +123,14 @@ return {
       { "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "DiffView close" },
       { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
       { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "Repo history" },
+      { "<leader>gP", function()
+        local base = get_pr_base()
+        if base then
+          vim.cmd("DiffviewOpen " .. base .. "...HEAD")
+        else
+          vim.notify("Could not determine PR base", vim.log.levels.WARN)
+        end
+      end, desc = "PR file changes (DiffView)" },
     },
     opts = {
       enhanced_diff_hl = true,

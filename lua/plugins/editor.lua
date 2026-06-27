@@ -85,6 +85,8 @@ return {
         { "<leader>f", group = "find/files" },
         { "<leader>g", group = "git" },
         { "<leader>gh", group = "hunks" },
+        { "<leader>gp", desc = "Toggle PR diff mode (gutter)" },
+        { "<leader>gP", desc = "PR file changes (DiffView)" },
         { "<leader>q", group = "quit/session" },
         { "<leader>s", group = "search/symbols" },
         { "<leader>t", group = "terminal" },
@@ -157,13 +159,9 @@ return {
         vue = { "template_string" },
       },
     },
-    config = function(_, opts)
-      local autopairs = require("nvim-autopairs")
-      autopairs.setup(opts)
-      -- Integrate with cmp
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      local cmp = require("cmp")
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    opts = function(_, opts)
+      -- blink.cmp handles auto-brackets natively; no cmp event hook needed
+      return opts
     end,
   },
 
