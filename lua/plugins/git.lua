@@ -20,6 +20,13 @@ local function get_pr_base()
   return sha
 end
 
+-- Compute merge-base against an explicit ref (no auto-detection).
+local function pr_base_for(ref)
+  local sha = vim.fn.system("git merge-base " .. vim.fn.shellescape(ref) .. " HEAD 2>/dev/null"):gsub("\n", "")
+  if sha == "" or sha:match("^fatal") then return nil end
+  return sha
+end
+
 local pr_mode = false
 
 return {
@@ -80,6 +87,20 @@ return {
           end
         end, "Toggle PR diff mode")
 
+        map("n", "<leader>gpb", function()
+          vim.ui.input({ prompt = "PR base ref: " }, function(ref)
+            if not ref or ref == "" then return end
+            local base = pr_base_for(ref)
+            if base then
+              gs.change_base(base, true)
+              pr_mode = true
+              vim.notify("Gitsigns: PR diff mode (" .. ref .. " @ " .. base:sub(1, 8) .. ")", vim.log.levels.INFO)
+            else
+              vim.notify("Gitsigns: could not find merge-base with " .. ref, vim.log.levels.WARN)
+            end
+          end)
+        end, "PR diff mode (custom base)")
+
         -- Text object
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Select hunk")
       end,
@@ -131,6 +152,17 @@ return {
           vim.notify("Could not determine PR base", vim.log.levels.WARN)
         end
       end, desc = "PR file changes (DiffView)" },
+      { "<leader>gPb", function()
+        vim.ui.input({ prompt = "PR base ref: " }, function(ref)
+          if not ref or ref == "" then return end
+          local base = pr_base_for(ref)
+          if base then
+            vim.cmd("DiffviewOpen " .. base .. "...HEAD")
+          else
+            vim.notify("Could not find merge-base with " .. ref, vim.log.levels.WARN)
+          end
+        end)
+      end, desc = "PR file changes — custom base (DiffView)" },
     },
     opts = {
       enhanced_diff_hl = true,
