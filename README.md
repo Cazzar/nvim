@@ -53,6 +53,30 @@ cargo install tree-sitter-cli
 
 After installing, open Neovim and run `:TSUpdate`.
 
+### Nerd Font
+
+Required for file-type icons in the explorer, statusline, and bufferline.
+[JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads) is a good default.
+
+```powershell
+# Windows
+winget install -e --id DEVCOM.JetBrainsMonoNerdFont
+```
+
+```bash
+# macOS
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
+After installing, set the font in your terminal.
+If you skip the font install, set `vim.g.have_nerd_font = false` in `pre-init.local.lua` — icons will fall back to plain ASCII.
+
+- **Windows Terminal** — Settings → the profile you use → Appearance → Font face → `JetBrainsMono Nerd Font`
+- **Ghostty** — add to `~/.config/ghostty/config`:
+  ```
+  font-family = JetBrainsMono Nerd Font
+  ```
+
 | Tool | Purpose |
 |------|---------|
 | `tree-sitter` | **Required** — compile treesitter parsers (see below) |

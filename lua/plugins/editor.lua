@@ -54,7 +54,7 @@ return {
       },
       default_component_configs = {
         indent = { with_expanders = true },
-        git_status = {
+        git_status = vim.g.have_nerd_font and {
           symbols = {
             added     = "✚",
             deleted   = "✖",
@@ -65,6 +65,18 @@ return {
             unstaged  = "󰄱",
             staged    = "",
             conflict  = "",
+          },
+        } or {
+          symbols = {
+            added     = "✚",
+            deleted   = "✖",
+            modified  = "~",
+            renamed   = "»",
+            untracked = "?",
+            ignored   = "·",
+            unstaged  = "!",
+            staged    = "+",
+            conflict  = "=",
           },
         },
       },

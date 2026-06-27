@@ -43,8 +43,8 @@ return {
         theme = "catppuccin-mocha",
         globalstatus = true,
         disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
-        section_separators = { left = "", right = "" },
-        component_separators = { left = "", right = "" },
+        section_separators = vim.g.have_nerd_font and { left = "", right = "" } or { left = "", right = "" },
+        component_separators = vim.g.have_nerd_font and { left = "", right = "" } or { left = "", right = "" },
       },
       sections = {
         lualine_a = { "mode" },
@@ -179,7 +179,23 @@ return {
     },
   },
 
-  -- Icons
-  { "nvim-tree/nvim-web-devicons", lazy = true },
+  -- Icons (mini.icons mocks nvim-web-devicons for all other plugins)
+  {
+    "echasnovski/mini.icons",
+    version = false,
+    lazy = true,
+    specs = {
+      { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
+    },
+    opts = {
+      style = vim.g.have_nerd_font and "glyph" or "ascii",
+    },
+    init = function()
+      package.preload["nvim-web-devicons"] = function()
+        require("mini.icons").mock_nvim_web_devicons()
+        return package.loaded["nvim-web-devicons"]
+      end
+    end,
+  },
   { "MunifTanjim/nui.nvim", lazy = true },
 }

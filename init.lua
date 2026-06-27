@@ -19,6 +19,11 @@ if vim.loop.fs_stat(pre_init) then
   dofile(pre_init)
 end
 
+-- Default: assume Nerd Font is available; override in pre-init.local.lua with false
+if vim.g.have_nerd_font == nil then
+  vim.g.have_nerd_font = true
+end
+
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
