@@ -1974,6 +1974,19 @@
         <script>
             (function () {
                 var searchInput = document.getElementById("card-search");
+
+                document.addEventListener("keydown", function (e) {
+                    if (e.key === "/" && document.activeElement !== searchInput) {
+                        e.preventDefault();
+                        searchInput.focus();
+                    }
+                    if (e.key === "Escape" && document.activeElement === searchInput) {
+                        searchInput.value = "";
+                        searchInput.dispatchEvent(new Event("input"));
+                        searchInput.blur();
+                    }
+                });
+
                 searchInput.addEventListener("input", function () {
                     var query = this.value.toLowerCase().trim();
                     document.querySelectorAll(".card").forEach(function (card) {
