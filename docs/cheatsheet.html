@@ -125,6 +125,9 @@
                 text-transform: uppercase;
                 color: var(--head);
                 text-shadow: 0 0 10px rgba(0, 204, 51, 0.4);
+                position: sticky;
+                top: 0;
+                z-index: 1;
             }
 
             table {
@@ -251,6 +254,30 @@
                 color: var(--comment);
             }
 
+            /* ── Header actions row ── */
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-top: 0.6rem;
+            }
+
+            .search-input {
+                background: var(--bg3);
+                border: 1px solid var(--muted);
+                border-radius: 2px;
+                color: var(--bright);
+                font-family: inherit;
+                font-size: 0.75rem;
+                letter-spacing: 0.03em;
+                outline: none;
+                padding: 0.25rem 0.75rem;
+                width: 220px;
+                transition: border-color 0.15s;
+            }
+            .search-input::placeholder { color: var(--comment); }
+            .search-input:focus { border-color: var(--accent); }
+
             /* ── Quick Install popover ── */
             .install-btn {
                 background: none;
@@ -261,7 +288,6 @@
                 font-family: inherit;
                 font-size: 0.75rem;
                 letter-spacing: 0.05em;
-                margin-top: 0.6rem;
                 padding: 0.25rem 0.75rem;
                 transition: border-color 0.15s, color 0.15s;
             }
@@ -585,7 +611,10 @@
                 <code>%LOCALAPPDATA%\nvim</code> (Windows) &nbsp;·&nbsp;
                 <code>:checkhealth</code> to verify setup
             </p>
-            <button class="install-btn" popovertarget="install-popover">Quick Install</button>
+            <div class="header-actions">
+                <input type="text" id="card-search" class="search-input" placeholder="filter shortcuts..." autocomplete="off" spellcheck="false">
+                <button class="install-btn" popovertarget="install-popover">Quick Install</button>
+            </div>
         </header>
 
         <div class="grid">
@@ -676,6 +705,317 @@
                         </tr>
                     </table>
                 </details>
+            </div>
+
+            <!-- MODES -->
+            <div class="card h-general">
+                <div class="card-header">Modes</div>
+                <table>
+                    <tr class="sub-header">
+                        <td colspan="2">entering insert mode</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i</kbd> / <kbd>a</kbd></td>
+                        <td>Insert before / after cursor</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>I</kbd> / <kbd>A</kbd></td>
+                        <td>Insert at line start / end</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>o</kbd> / <kbd>O</kbd></td>
+                        <td>New line below / above, then insert</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>s</kbd></td>
+                        <td>Delete char and insert <span class="note">remapped to Flash in this config</span></td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">other modes</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>v</kbd> / <kbd>V</kbd></td>
+                        <td>Visual character / line mode</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>C-v</kbd></td>
+                        <td>Visual block mode (column select)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>R</kbd></td>
+                        <td>Replace mode (overtype)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>:</kbd></td>
+                        <td>Command-line mode</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">returning to normal mode</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Esc</kbd> / <kbd>jk</kbd></td>
+                        <td>Normal mode from insert (<kbd>jk</kbd> = this config)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>C-\</kbd><kbd>C-n</kbd></td>
+                        <td>Normal mode from terminal (<kbd>Esc Esc</kbd> = this config)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- BASIC MOTION -->
+            <div class="card h-motion">
+                <div class="card-header">Basic Motion</div>
+                <table>
+                    <tr class="sub-header">
+                        <td colspan="2">character &amp; word</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd></td>
+                        <td>Left / down / up / right</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>w</kbd> / <kbd>b</kbd></td>
+                        <td>Next / prev word start</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>e</kbd></td>
+                        <td>Next word end</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>W</kbd> / <kbd>B</kbd> / <kbd>E</kbd></td>
+                        <td>Same, skipping punctuation</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">line</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>0</kbd> / <kbd>$</kbd></td>
+                        <td>Line start / end</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>^</kbd></td>
+                        <td>First non-blank character</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">file &amp; screen</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>gg</kbd> / <kbd>G</kbd></td>
+                        <td>File start / end</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>{</kbd> / <kbd>}</kbd></td>
+                        <td>Prev / next blank line</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>%</kbd></td>
+                        <td>Jump to matching bracket</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>H</kbd> / <kbd>M</kbd> / <kbd>L</kbd></td>
+                        <td>Screen top / middle / bottom</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>5</kbd><kbd>j</kbd></td>
+                        <td>Any count prefix works — e.g. 5 lines down</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">jump list</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>C-o</kbd> / <kbd>C-i</kbd></td>
+                        <td>Jump back / forward in location history</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>gi</kbd></td>
+                        <td>Return to last insert location</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>''</kbd></td>
+                        <td>Jump back to last cursor position</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- OPERATORS -->
+            <div class="card h-edit">
+                <div class="card-header">Operators</div>
+                <table>
+                    <tr>
+                        <td colspan="2" style="color:var(--comment);font-size:0.72em;padding-top:0.4rem;padding-bottom:0.2rem">
+                            Operators combine with a motion or text object: <kbd>d</kbd><em>w</em>, <kbd>c</kbd><em>iw</em>, <kbd>y</kbd><em>$</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><kbd>d</kbd><em>{motion}</em></td>
+                        <td>Delete</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>c</kbd><em>{motion}</em></td>
+                        <td>Change (delete + enter insert)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>y</kbd><em>{motion}</em></td>
+                        <td>Yank (copy)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>dd</kbd> / <kbd>yy</kbd> / <kbd>cc</kbd></td>
+                        <td>Delete / yank / change whole line</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>D</kbd> / <kbd>C</kbd></td>
+                        <td>Delete / change to end of line</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>x</kbd></td>
+                        <td>Delete character under cursor</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>r</kbd><em>{char}</em></td>
+                        <td>Replace character <span class="note">not to be confused with remote-flash r</span></td>
+                    </tr>
+                    <tr>
+                        <td><kbd>p</kbd> / <kbd>P</kbd></td>
+                        <td>Paste after / before cursor</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>u</kbd> / <kbd>C-r</kbd></td>
+                        <td>Undo / redo</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>.</kbd></td>
+                        <td>Repeat last change</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>~</kbd></td>
+                        <td>Toggle case of character</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>&gt;&gt;</kbd> / <kbd>&lt;&lt;</kbd></td>
+                        <td>Indent / un-indent line</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- TEXT OBJECTS -->
+            <div class="card h-edit">
+                <div class="card-header">Text Objects</div>
+                <table>
+                    <tr>
+                        <td colspan="2" style="color:var(--comment);font-size:0.72em;padding-top:0.4rem;padding-bottom:0.2rem">
+                            Use after any operator or in visual mode: <kbd>d</kbd><em>iw</em>, <kbd>v</kbd><em>ap</em>, <kbd>c</kbd><em>i"</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><em>i</em> / <em>a</em></td>
+                        <td><em>inner</em> (excludes delimiters) / <em>around</em> (includes them)</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">built-in</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>iw</kbd> / <kbd>aw</kbd></td>
+                        <td>Word / word + surrounding space</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>ip</kbd> / <kbd>ap</kbd></td>
+                        <td>Paragraph</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i"</kbd> / <kbd>a"</kbd></td>
+                        <td>Double-quoted string</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i'</kbd> / <kbd>a'</kbd></td>
+                        <td>Single-quoted string</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i`</kbd> / <kbd>a`</kbd></td>
+                        <td>Backtick string</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i(</kbd> / <kbd>a(</kbd></td>
+                        <td>Parentheses</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i[</kbd> / <kbd>a[</kbd></td>
+                        <td>Square brackets</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>i{</kbd> / <kbd>a{</kbd></td>
+                        <td>Curly braces</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>it</kbd> / <kbd>at</kbd></td>
+                        <td>HTML / XML tag</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">treesitter (this config)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>if</kbd> / <kbd>af</kbd></td>
+                        <td>Function inner / outer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>ic</kbd> / <kbd>ac</kbd></td>
+                        <td>Class inner / outer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>ia</kbd> / <kbd>aa</kbd></td>
+                        <td>Argument / parameter</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>ii</kbd> / <kbd>ai</kbd></td>
+                        <td>Conditional inner / outer</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>il</kbd> / <kbd>al</kbd></td>
+                        <td>Loop inner / outer</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="card h-motion">
+                <div class="card-header">Search</div>
+                <table>
+                    <tr>
+                        <td><kbd>/</kbd><em>{pattern}</em></td>
+                        <td>Search forward</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>?</kbd><em>{pattern}</em></td>
+                        <td>Search backward</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>n</kbd> / <kbd>N</kbd></td>
+                        <td>Next / prev match (centred in this config)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>*</kbd> / <kbd>#</kbd></td>
+                        <td>Search word under cursor forward / backward</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Esc</kbd></td>
+                        <td>Clear highlights</td>
+                    </tr>
+                    <tr class="sub-header">
+                        <td colspan="2">substitution (command mode)</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>:%s/</kbd><em>old</em><kbd>/</kbd><em>new</em><kbd>/g</kbd></td>
+                        <td>Replace all in file</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>:s/</kbd><em>old</em><kbd>/</kbd><em>new</em><kbd>/g</kbd></td>
+                        <td>Replace all on current line</td>
+                    </tr>
+                    <tr>
+                        <td>add <kbd>c</kbd> flag</td>
+                        <td>Confirm each replacement interactively</td>
+                    </tr>
+                </table>
             </div>
 
             <!-- GENERAL -->
@@ -1353,6 +1693,17 @@
                         <td>Toggle line comment</td>
                     </tr>
                     <tr class="sub-header">
+                        <td colspan="2">system clipboard</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>"+y</kbd><em>{motion}</em></td>
+                        <td>Yank to system clipboard</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>"+p</kbd></td>
+                        <td>Paste from system clipboard</td>
+                    </tr>
+                    <tr class="sub-header">
                         <td colspan="2">surround (nvim-surround)</td>
                     </tr>
                     <tr>
@@ -1422,9 +1773,13 @@
                         <td><kbd>&lt;leader&gt;rr</kbd></td>
                         <td>Related diagnostics</td>
                     </tr>
-                    <tr class="sub-header">
-                        <td colspan="2">cargo.toml (crates.nvim)</td>
-                    </tr>
+                </table>
+            </div>
+
+            <!-- CARGO -->
+            <div class="card h-rust">
+                <div class="card-header">Cargo.toml (crates.nvim)</div>
+                <table>
                     <tr>
                         <td><kbd>&lt;leader&gt;ct</kbd></td>
                         <td>Toggle crates info</td>
@@ -1615,6 +1970,39 @@
                 <div class="install-code"><span>:Mason</span><button class="copy-btn">copy</button></div>
             </div>
         </div>
+
+        <script>
+            (function () {
+                var searchInput = document.getElementById("card-search");
+                searchInput.addEventListener("input", function () {
+                    var query = this.value.toLowerCase().trim();
+                    document.querySelectorAll(".card").forEach(function (card) {
+                        if (!query) {
+                            card.style.display = "";
+                            card.querySelectorAll("tr").forEach(function (tr) { tr.style.opacity = ""; });
+                            return;
+                        }
+                        var headerEl = card.querySelector(".card-header");
+                        var headerMatch = headerEl && headerEl.textContent.toLowerCase().includes(query);
+                        var dataRows = card.querySelectorAll("tr:not(.sub-header)");
+                        var anyRowMatch = false;
+                        dataRows.forEach(function (tr) {
+                            var match = tr.textContent.toLowerCase().includes(query);
+                            tr.style.opacity = match ? "" : "0.15";
+                            if (match) anyRowMatch = true;
+                        });
+                        if (headerMatch || anyRowMatch) {
+                            card.style.display = "";
+                            if (headerMatch) {
+                                dataRows.forEach(function (tr) { tr.style.opacity = ""; });
+                            }
+                        } else {
+                            card.style.display = "none";
+                        }
+                    });
+                });
+            })();
+        </script>
 
         <script>
             (function () {
