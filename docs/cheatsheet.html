@@ -1975,6 +1975,15 @@
             (function () {
                 var searchInput = document.getElementById("card-search");
 
+                function fuzzy(text, query) {
+                    var ti = 0, qi = 0;
+                    while (ti < text.length && qi < query.length) {
+                        if (text[ti] === query[qi]) qi++;
+                        ti++;
+                    }
+                    return qi === query.length;
+                }
+
                 document.addEventListener("keydown", function (e) {
                     if (e.key === "/" && document.activeElement !== searchInput) {
                         e.preventDefault();
@@ -1996,11 +2005,11 @@
                             return;
                         }
                         var headerEl = card.querySelector(".card-header");
-                        var headerMatch = headerEl && headerEl.textContent.toLowerCase().includes(query);
+                        var headerMatch = headerEl && fuzzy(headerEl.textContent.toLowerCase(), query);
                         var dataRows = card.querySelectorAll("tr:not(.sub-header)");
                         var anyRowMatch = false;
                         dataRows.forEach(function (tr) {
-                            var match = tr.textContent.toLowerCase().includes(query);
+                            var match = fuzzy(tr.textContent.toLowerCase(), query);
                             tr.style.opacity = match ? "" : "0.15";
                             if (match) anyRowMatch = true;
                         });
