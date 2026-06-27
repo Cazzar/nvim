@@ -1,9 +1,6 @@
 -- Interactive SQL/DB UI via vim-dadbod
--- Connections: set DBUI_URL env, or use :DBUI and add via the UI
--- Supports MySQL, PostgreSQL, SQLite and more through connection strings:
---   mysql://user:pass@host/db
---   postgresql://user:pass@host/db
---   sqlite:///path/to/file.db
+-- Connections are machine-local — add them via :DBUIAddConnection (saved to stdpath("data"))
+-- or define vim.g.dbs in post-init.local.lua for pre-configured connections:
 return {
   {
     "tpope/vim-dadbod",

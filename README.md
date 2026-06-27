@@ -85,10 +85,40 @@ set -g @plugin 'christoomey/vim-tmux-navigator'
 run '~/.tmux/plugins/tpm/tpm'
 ```
 
+## Machine-local config
+
+Three escape hatches that are gitignored and never committed:
+
+| File / Path | When it loads | Use for |
+|---|---|---|
+| `pre-init.local.lua` | Before options, keymaps, and plugins | Leader key override, early globals |
+| `post-init.local.lua` | After all plugins are loaded | Extra keymaps, plugin overrides, machine-specific config |
+| `lua/local/*.lua` | During lazy.nvim setup | Adding plugins or overriding plugin specs locally |
+
+`lua/local/` only needs to exist when you actually have local plugins — create it on demand.
+`pre-init.local.lua` and `post-init.local.lua` are silently skipped if absent.
+
+Example — override the leader key on one machine:
+
+```lua
+-- pre-init.local.lua
+vim.g.mapleader = ","
+```
+
 ## SQL connections
 
-Add database connection strings to `lua/plugins/sql.lua` in the `sqls` server settings,
-or use `:DBUIAddConnection` at runtime to add them interactively.
+Connections are machine-local and never committed. Two options:
+
+- **Interactive:** `:DBUIAddConnection` — saved automatically to `stdpath("data")` outside the repo.
+- **Pre-configured:** define `vim.g.dbs` in `post-init.local.lua`:
+
+```lua
+-- post-init.local.lua
+vim.g.dbs = {
+  { name = "work-pg",  url = "postgresql://user:pass@host/db" },
+  { name = "local-pg", url = "postgresql://localhost/mydb" },
+}
+```
 
 ## Key mappings (highlights)
 
