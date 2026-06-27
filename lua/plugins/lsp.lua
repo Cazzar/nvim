@@ -26,11 +26,8 @@ local function on_attach(_, bufnr)
   end
 end
 
--- Default capabilities (extended by nvim-cmp)
 local function make_capabilities()
-  local caps = vim.lsp.protocol.make_client_capabilities()
-  caps = vim.tbl_deep_extend("force", caps, require("cmp_nvim_lsp").default_capabilities())
-  return caps
+  return require("blink.cmp").get_lsp_capabilities()
 end
 
 -- Server configurations
@@ -200,7 +197,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "neovim/nvim-lspconfig",
-      "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       require("mason-lspconfig").setup({
@@ -250,7 +246,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp",
       "b0o/schemastore.nvim",
     },
     config = function()
