@@ -107,6 +107,8 @@ return {
         { "<leader>u", group = "ui" },
         { "<leader>x", group = "diagnostics/quickfix" },
         { "<leader><tab>", group = "tabs" },
+        { "<leader><tab>[", desc = "Previous tab" },
+        { "<leader><tab>]", desc = "Next tab" },
         { "[", group = "prev" },
         { "]", group = "next" },
         { "g", group = "goto" },
