@@ -1,39 +1,38 @@
+local function is_sha(s) return s:match("^%x%x%x%x%x%x%x") ~= nil end
+
 -- Detect the merge-base of HEAD against the remote default branch.
 -- Returns the commit SHA, or nil if it can't be determined.
 local function get_pr_base()
-  local remote_head = vim.fn.system("git rev-parse --abbrev-ref origin/HEAD 2>/dev/null"):gsub("\n", "")
+  local remote_head = vim.fn.system({ "git", "rev-parse", "--abbrev-ref", "origin/HEAD" }):gsub("%s+", "")
   local base_ref
-  if remote_head ~= "" and not remote_head:match("^fatal") then
+  if remote_head ~= "" and not remote_head:match("^fatal") and not remote_head:match("^error") then
     base_ref = remote_head
   else
     for _, ref in ipairs({ "origin/main", "origin/master", "origin/develop" }) do
-      local result = vim.fn.system("git rev-parse --verify " .. ref .. " 2>/dev/null"):gsub("\n", "")
-      if result ~= "" and not result:match("^fatal") then
+      local result = vim.fn.system({ "git", "rev-parse", "--verify", ref }):gsub("%s+", "")
+      if is_sha(result) then
         base_ref = ref
         break
       end
     end
   end
   if not base_ref then return nil end
-  local sha = vim.fn.system("git merge-base " .. base_ref .. " HEAD 2>/dev/null"):gsub("\n", "")
-  if sha == "" or sha:match("^fatal") then return nil end
-  return sha
+  local sha = vim.fn.system({ "git", "merge-base", base_ref, "HEAD" }):gsub("%s+", "")
+  return is_sha(sha) and sha or nil
 end
 
 -- Tab-completion for git refs, wired into vim.fn.input via customlist.
 _G._pr_base_complete = function(arglead)
-  local refs = vim.fn.systemlist(
-    "git for-each-ref --format=%(refname:short) refs/remotes refs/heads 2>/dev/null"
-  )
+  local refs = vim.fn.systemlist({ "git", "for-each-ref", "--format=%(refname:short)", "refs/remotes", "refs/heads" })
+  refs = vim.tbl_filter(function(r) return r ~= "" and not r:match("^fatal") end, refs)
   if arglead == "" then return refs end
   return vim.tbl_filter(function(r) return r:find(arglead, 1, true) ~= nil end, refs)
 end
 
 -- Compute merge-base against an explicit ref (no auto-detection).
 local function pr_base_for(ref)
-  local sha = vim.fn.system("git merge-base " .. vim.fn.shellescape(ref) .. " HEAD 2>/dev/null"):gsub("\n", "")
-  if sha == "" or sha:match("^fatal") then return nil end
-  return sha
+  local sha = vim.fn.system({ "git", "merge-base", ref, "HEAD" }):gsub("%s+", "")
+  return is_sha(sha) and sha or nil
 end
 
 local pr_mode = false
