@@ -185,6 +185,7 @@ return {
   -- Classic Fugitive (for :GBrowse, :Git blame, etc.)
   {
     "tpope/vim-fugitive",
+    dependencies = { "tpope/vim-rhubarb" },
     cmd = { "Git", "GBrowse", "Gdiffsplit", "Gread", "Gwrite", "Gclog" },
     keys = {
       { "<leader>gf", "<cmd>Git<cr>", desc = "Fugitive" },
