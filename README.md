@@ -129,6 +129,26 @@ Example — override the leader key on one machine:
 vim.g.mapleader = ","
 ```
 
+## Per-project config (`.nvim.lua`)
+
+`exrc` is enabled, so Neovim reads `.nvim.lua` from the project root on startup (Neovim will prompt to trust the file the first time). Use this to override formatting, LSP settings, or anything else per repo.
+
+Common uses:
+
+```lua
+-- .nvim.lua — disable format-on-save for this repo
+require("conform").setup({ format_on_save = false })
+```
+
+```lua
+-- .nvim.lua — use a different formatter for this repo
+require("conform").setup({
+  formatters_by_ft = { cs = { "csharpier" } },
+})
+```
+
+You can commit `.nvim.lua` to the repo so the whole team gets the same behaviour.
+
 ## SQL connections
 
 Connections are machine-local and never committed. Two options:

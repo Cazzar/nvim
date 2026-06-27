@@ -65,3 +65,5 @@ opt.spelllang = { "en_au" }
 opt.spelloptions = "camel"
 
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+opt.exrc = true
