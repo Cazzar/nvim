@@ -251,6 +251,124 @@
                 color: var(--comment);
             }
 
+            /* ── Quick Install popover ── */
+            .install-btn {
+                background: none;
+                border: 1px solid var(--muted);
+                border-radius: 2px;
+                color: var(--accent);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: 0.75rem;
+                letter-spacing: 0.05em;
+                margin-top: 0.6rem;
+                padding: 0.25rem 0.75rem;
+                transition: border-color 0.15s, color 0.15s;
+            }
+            .install-btn:hover {
+                border-color: var(--accent);
+                color: var(--bright);
+            }
+
+            #install-popover {
+                background: var(--bg2);
+                border: 1px solid var(--border);
+                border-radius: 2px;
+                box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
+                color: var(--text);
+                font-family: "JetBrains Mono", monospace;
+                padding: 0;
+                width: min(500px, 92vw);
+            }
+            #install-popover::backdrop {
+                background: rgba(0, 0, 0, 0.55);
+            }
+
+            .popover-title {
+                align-items: center;
+                background: var(--bg3);
+                border-bottom: 1px solid var(--border);
+                color: var(--head);
+                display: flex;
+                font-size: 0.68rem;
+                font-weight: 700;
+                justify-content: space-between;
+                letter-spacing: 0.15em;
+                padding: 0.45rem 0.85rem 0.45rem 1.1rem;
+                text-transform: uppercase;
+            }
+            .popover-close {
+                background: none;
+                border: none;
+                color: var(--muted);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: 1rem;
+                line-height: 1;
+                padding: 0;
+            }
+            .popover-close:hover { color: var(--bright); }
+
+            .os-tabs {
+                border-bottom: 1px solid var(--border);
+                display: flex;
+            }
+            .os-tab {
+                background: none;
+                border: none;
+                border-right: 1px solid var(--border);
+                color: var(--muted);
+                cursor: pointer;
+                font-family: inherit;
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                padding: 0.4rem 1.1rem;
+                text-transform: uppercase;
+            }
+            .os-tab:last-child { border-right: none; }
+            .os-tab:hover { color: var(--text); }
+            .os-tab.active { background: var(--bg3); color: var(--bright); }
+
+            .os-pane { display: none; padding: 1rem 1.1rem; }
+            .os-pane.active { display: block; }
+
+            .os-pane p {
+                color: var(--comment);
+                font-size: 0.72rem;
+                margin: 0.65rem 0 0.35rem;
+            }
+
+            .install-code {
+                align-items: center;
+                background: var(--bg3);
+                border: 1px solid var(--dim);
+                border-radius: 2px;
+                color: var(--key);
+                display: flex;
+                font-size: 0.8rem;
+                gap: 0.5rem;
+                justify-content: space-between;
+                margin-top: 0.35rem;
+                padding: 0.45rem 0.75rem;
+            }
+            .install-code:first-child { margin-top: 0; }
+            .install-code span { white-space: pre; overflow: hidden; text-overflow: ellipsis; }
+
+            .copy-btn {
+                background: none;
+                border: 1px solid var(--dim);
+                border-radius: 2px;
+                color: var(--muted);
+                cursor: pointer;
+                flex-shrink: 0;
+                font-family: inherit;
+                font-size: 0.65rem;
+                letter-spacing: 0.05em;
+                padding: 0.1rem 0.4rem;
+            }
+            .copy-btn:hover { border-color: var(--muted); color: var(--bright); }
+            .copy-btn.copied { color: var(--accent); }
+
             .legend-row td:first-child {
                 color: var(--key);
                 min-width: 60px;
@@ -467,6 +585,7 @@
                 <code>%LOCALAPPDATA%\nvim</code> (Windows) &nbsp;·&nbsp;
                 <code>:checkhealth</code> to verify setup
             </p>
+            <button class="install-btn" popovertarget="install-popover">Quick Install</button>
         </header>
 
         <div class="grid">
@@ -1435,5 +1554,76 @@
                 </table>
             </div>
         </div>
+        <div id="install-popover" popover="auto">
+            <div class="popover-title">
+                Quick Install
+                <button class="popover-close" popovertarget="install-popover" popovertargetaction="hide">&#x2715;</button>
+            </div>
+            <div class="os-tabs">
+                <button class="os-tab" data-os="windows">Windows</button>
+                <button class="os-tab" data-os="mac">macOS</button>
+                <button class="os-tab" data-os="linux">Linux</button>
+            </div>
+            <div id="pane-windows" class="os-pane">
+                <div class="install-code"><span>git clone https://github.com/Cazzar/nvim %LOCALAPPDATA%\nvim</span><button class="copy-btn">copy</button></div>
+                <p>Open Neovim &mdash; plugins install automatically. Then:</p>
+                <div class="install-code"><span>:Lazy sync</span><button class="copy-btn">copy</button></div>
+                <div class="install-code"><span>:Mason</span><button class="copy-btn">copy</button></div>
+            </div>
+            <div id="pane-mac" class="os-pane">
+                <div class="install-code"><span>git clone https://github.com/Cazzar/nvim ~/.config/nvim</span><button class="copy-btn">copy</button></div>
+                <p>Open Neovim &mdash; plugins install automatically. Then:</p>
+                <div class="install-code"><span>:Lazy sync</span><button class="copy-btn">copy</button></div>
+                <div class="install-code"><span>:Mason</span><button class="copy-btn">copy</button></div>
+            </div>
+            <div id="pane-linux" class="os-pane">
+                <div class="install-code"><span>git clone https://github.com/Cazzar/nvim ~/.config/nvim</span><button class="copy-btn">copy</button></div>
+                <p>Open Neovim &mdash; plugins install automatically. Then:</p>
+                <div class="install-code"><span>:Lazy sync</span><button class="copy-btn">copy</button></div>
+                <div class="install-code"><span>:Mason</span><button class="copy-btn">copy</button></div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                function detectOS() {
+                    const ua = navigator.userAgent;
+                    if (ua.includes("Windows")) return "windows";
+                    if (ua.includes("Mac")) return "mac";
+                    return "linux";
+                }
+
+                function switchTab(os) {
+                    document.querySelectorAll(".os-tab").forEach(function (t) {
+                        t.classList.toggle("active", t.dataset.os === os);
+                    });
+                    document.querySelectorAll(".os-pane").forEach(function (p) {
+                        p.classList.toggle("active", p.id === "pane-" + os);
+                    });
+                }
+
+                document.querySelectorAll(".os-tab").forEach(function (tab) {
+                    tab.addEventListener("click", function () { switchTab(tab.dataset.os); });
+                });
+
+                document.querySelectorAll(".copy-btn").forEach(function (btn) {
+                    btn.addEventListener("click", function () {
+                        var text = btn.previousElementSibling.textContent;
+                        navigator.clipboard.writeText(text).then(function () {
+                            btn.textContent = "copied!";
+                            btn.classList.add("copied");
+                            setTimeout(function () {
+                                btn.textContent = "copy";
+                                btn.classList.remove("copied");
+                            }, 1500);
+                        });
+                    });
+                });
+
+                document.getElementById("install-popover").addEventListener("toggle", function (e) {
+                    if (e.newState === "open") switchTab(detectOS());
+                });
+            })();
+        </script>
     </body>
 </html>
